@@ -1,6 +1,7 @@
 package model
 
 import (
+	"io/fs"
 	"path/filepath"
 	"strings"
 )
@@ -39,34 +40,40 @@ func (l Language) String() string {
 }
 
 func (l Language) Extensions() []string {
-	return languageExt[l]
+	return languageExtensions[l]
 }
 
 func DetectLanguage(root string) Language {
 	langScore := make(map[Language]int)
-	var walk func(dir string)
-	walk = func(dir string) {
-		entries, _ := filepath.Glob(filepath.Join(dir, "*"))
-		for _, entry := range entries {
-			ext := strings.ToLower(filepath.Ext(entry))
-			for lang, exts := range languageExt {
-				for _, e := range exts {
-					if ext == e {
-						langs[lang]++
-					}
+
+	filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+		if err != nil || d.IsDir() {
+			return nil
+		}
+
+		ext := strings.ToLower(filepath.Ext(path))
+
+		for lang, exts := range languageExtensions {
+			for _, e := range exts {
+				if ext == e {
+					langScore[lang]++
+					break
 				}
 			}
 		}
-	}
-	walk(root)
+
+		return nil
+	})
 
 	var detected Language
 	maxCount := 0
-	for lang, count := range langs {
+
+	for lang, count := range langScore {
 		if count > maxCount {
 			maxCount = count
 			detected = lang
 		}
 	}
+
 	return detected
 }
