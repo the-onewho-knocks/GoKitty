@@ -2,8 +2,9 @@ package interfaces
 
 import (
 	"context"
-	"gokitty/pkg/model"
 	"time"
+
+	"github.com/the-onewho-knocks/gokitty/pkg/model"
 )
 
 type ToolExecutor interface {

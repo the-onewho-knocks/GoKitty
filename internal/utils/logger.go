@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"os"
 	"strings"
+	"time"
 )
 
 var logLevel = new(slog.LevelVar)
@@ -21,13 +22,14 @@ func InitLogger(level string) {
 	default:
 		logLevel.Set(slog.LevelInfo)
 	}
-
 	handler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
-		Level: logLevel,
+		Level:       logLevel,
+		TimeFormat:  time.RFC3339,
 	})
 	slog.SetDefault(slog.New(handler))
 }
 
-func Logger() *slog.Logger {
-	return slog.Default()
-}
+func LogDebug(msg string, args ...any) { slog.Debug(msg, args...) }
+func LogInfo(msg string, args ...any)  { slog.Info(msg, args...) }
+func LogWarn(msg string, args ...any)  { slog.Warn(msg, args...) }
+func LogError(msg string, args ...any) { slog.Error(msg, args...) }

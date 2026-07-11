@@ -3,7 +3,8 @@ package model
 type Category int
 
 const (
-	CategoryBug Category = iota + 1
+	CategoryUnknown Category = iota
+	CategoryBug
 	CategorySecurity
 	CategoryPerformance
 	CategoryStyle
@@ -16,21 +17,30 @@ const (
 )
 
 var categoryNames = map[Category]string{
-	CategoryBug:            "bug",
-	CategorySecurity:        "security",
-	CategoryPerformance:    "performance",
-	CategoryStyle:          "style",
-	CategoryComplexity:     "complexity",
-	CategoryDuplication:    "duplication",
-	CategoryArchitecture:   "architecture",
-	CategoryTesting:        "testing",
-	CategoryDocumentation:  "documentation",
-	CategoryBestPractice:   "best_practice",
+	CategoryBug:           "bug",
+	CategorySecurity:       "security",
+	CategoryPerformance:   "performance",
+	CategoryStyle:         "style",
+	CategoryComplexity:    "complexity",
+	CategoryDuplication:   "duplication",
+	CategoryArchitecture:  "architecture",
+	CategoryTesting:       "testing",
+	CategoryDocumentation: "documentation",
+	CategoryBestPractice:  "best_practice",
 }
 
 func (c Category) String() string {
-	if name, ok := categoryNames[c]; ok {
-		return name
+	if n, ok := categoryNames[c]; ok {
+		return n
 	}
 	return "unknown"
+}
+
+func ParseCategory(s string) Category {
+	for cat, name := range categoryNames {
+		if name == s {
+			return cat
+		}
+	}
+	return CategoryUnknown
 }

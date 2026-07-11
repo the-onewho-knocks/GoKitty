@@ -6,7 +6,7 @@ func MarshalJSON(v any) ([]byte, error) {
 	return json.Marshal(v)
 }
 
-func MarshalIndent(v any) ([]byte, error) {
+func MarshalIndentJSON(v any) ([]byte, error) {
 	return json.MarshalIndent(v, "", "  ")
 }
 
@@ -15,7 +15,7 @@ func UnmarshalJSON(data []byte, v any) error {
 }
 
 func PrettyPrintJSON(v any) string {
-	data, err := MarshalIndent(v)
+	data, err := MarshalIndentJSON(v)
 	if err != nil {
 		return err.Error()
 	}

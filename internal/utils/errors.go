@@ -5,12 +5,13 @@ import "fmt"
 type ErrType int
 
 const (
-	ErrProjectNotFound ErrType = iota + 1
+	ErrProjectNotFound    ErrType = iota + 1
 	ErrLanguageUnsupported
 	ErrToolNotFound
 	ErrAnalysisFailed
 	ErrConfigInvalid
 	ErrDriverFailed
+	ErrTimeout
 )
 
 type KittyError struct {
@@ -26,9 +27,7 @@ func (e *KittyError) Error() string {
 	return e.Message
 }
 
-func (e *KittyError) Unwrap() error {
-	return e.Wrapped
-}
+func (e *KittyError) Unwrap() error { return e.Wrapped }
 
 func NewProjectNotFound(path string) *KittyError {
 	return &KittyError{Type: ErrProjectNotFound, Message: fmt.Sprintf("project not found: %s", path)}

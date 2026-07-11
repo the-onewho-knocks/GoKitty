@@ -3,28 +3,35 @@ package model
 type Severity int
 
 const (
-	SeverityCritical Severity = iota + 1
-	SeverityHigh
-	SeverityMedium
-	SeverityLow
+	SeverityUnknown Severity = iota
 	SeverityInfo
+	SeverityLow
+	SeverityMedium
+	SeverityHigh
+	SeverityCritical
 )
 
 var severityNames = map[Severity]string{
+	SeverityUnknown: "unknown",
+	SeverityInfo:    "info",
+	SeverityLow:     "low",
+	SeverityMedium:  "medium",
+	SeverityHigh:    "high",
 	SeverityCritical: "critical",
-	SeverityHigh:     "high",
-	SeverityMedium:   "medium",
-	SeverityLow:      "low",
-	SeverityInfo:     "info",
 }
 
 func (s Severity) String() string {
-	if name, ok := severityNames[s]; ok {
-		return name
+	if n, ok := severityNames[s]; ok {
+		return n
 	}
 	return "unknown"
 }
 
-func (s Severity) Int() int {
-	return int(s)
+func ParseSeverity(s string) Severity {
+	for sev, name := range severityNames {
+		if name == s {
+			return sev
+		}
+	}
+	return SeverityUnknown
 }

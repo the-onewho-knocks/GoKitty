@@ -7,12 +7,14 @@ import (
 )
 
 func WalkFiles(root string, extensions []string) ([]string, error) {
-	var files []string
+	if extensions == nil {
+		extensions = []string{}
+	}
 	extSet := make(map[string]bool)
 	for _, e := range extensions {
 		extSet[strings.ToLower(e)] = true
 	}
-
+	var files []string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
